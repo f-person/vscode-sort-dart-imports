@@ -1,15 +1,19 @@
-import * as vscode from 'vscode';
+import { commands, Disposable, ExtensionContext, window, workspace } from 'vscode';
+import { DartImportSorter } from './core/dart-import-sorter';
 
-export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "sort-dart-imports" is now active!');
+export async function activate(context: ExtensionContext) {
+	const dartImportSorter = new DartImportSorter();
+	await dartImportSorter.initialize();
 
-	let disposable = vscode.commands.registerCommand('sort-dart-imports.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Sort Dart Imports!');
-	});
+	const sortImportsCommand: Disposable = commands.registerCommand(
+		'sort-dart-imports.sort',
+		dartImportSorter.handleSortCommand
+	);
 
-	context.subscriptions.push(disposable);
+	const onWillSaveTextDocument = workspace.onWillSaveTextDocument(dartImportSorter.handleOnWillSaveTextDocument);
+
+	context.subscriptions.push(sortImportsCommand);
+	context.subscriptions.push(onWillSaveTextDocument);
 }
 
 // this method is called when your extension is deactivated

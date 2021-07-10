@@ -1,5 +1,5 @@
 {
-  "name": "sort-dart-imports",
+	"name": "sort-dart-imports",
 	"displayName": "Sort Dart Imports",
 	"description": "Sort Dart imports automatically.",
 	"version": "0.0.1",
@@ -10,16 +10,25 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:sort-dart-imports.helloWorld"
+		"onCommand:sort-dart-imports.sort"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "sort-dart-imports.helloWorld",
-				"title": "Hello World"
+				"command": "sort-dart-imports.sort",
+				"title": "Sort Dart Imports",
+				"when": "editorLangId == dart"
 			}
-		]
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "sort-dart-imports.sort",
+					"when": "editorLangId == dart"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
