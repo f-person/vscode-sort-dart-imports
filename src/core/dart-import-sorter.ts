@@ -1,13 +1,16 @@
+import { readFileSync } from 'fs';
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 
 export class DartImportSorter {
 	private packageName: String = '';
 
 	public async initialize() {
-		console.log('initialize');
 		await this.findPackageName();
 	}
+
+	public handleSortCommand() {}
+
+	public handleOnWillSaveTextDocument(event: vscode.TextDocumentWillSaveEvent) {}
 
 	private async findPackageName() {
 		const pubspecs = await vscode.workspace.findFiles('pubspec.yaml');
@@ -17,7 +20,7 @@ export class DartImportSorter {
 		}
 
 		const pubspec = pubspecs[0];
-		const content = await fs.readFileSync(pubspec.fsPath, 'utf8');
+		const content = await readFileSync(pubspec.fsPath, 'utf8');
 		if (!content) {
 			vscode.window.showInformationMessage(`!content`);
 			return;
@@ -33,8 +36,4 @@ export class DartImportSorter {
 	}
 
 	private async sortImports() {}
-
-	public handleSortCommand() {}
-
-	public handleOnWillSaveTextDocument(event: vscode.TextDocumentWillSaveEvent) {}
 }
