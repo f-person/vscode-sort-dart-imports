@@ -31,8 +31,7 @@ export class DartImportSorter {
 		if (!match) {
 			return;
 		}
-		const packageName = match.toString().replace('name:', '').trim();
-		vscode.window.showInformationMessage(`packageName: ${packageName}`);
+		this.packageName = match.toString().replace('name:', '').trim();
 	}
 
 	private async sortImports() {}
