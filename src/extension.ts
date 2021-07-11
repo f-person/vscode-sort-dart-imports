@@ -5,9 +5,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	const dartImportSorter = new DartImportSorter();
 	await dartImportSorter.initialize();
 
-	const sortImportsCommand = vscode.commands.registerCommand(
-		'sort-dart-imports.sort',
-		dartImportSorter.handleSortCommand
+	const sortImportsCommand = vscode.commands.registerCommand('sort-dart-imports.sort', () =>
+		dartImportSorter.handleSortCommand()
 	);
 	const onWillSaveTextDocument = vscode.workspace.onWillSaveTextDocument(dartImportSorter.handleOnWillSaveTextDocument);
 
