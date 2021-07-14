@@ -60,12 +60,9 @@ export class DartImportSorter {
 		});
 		organizedImportsString = organizedImportsString.slice(0, -1);
 
-		vscode.window.showInformationMessage(`${range.start.line}-${range.end.line}`);
 		vscode.window.activeTextEditor!.edit((editBuilder) => {
 			editBuilder.replace(range, organizedImportsString);
 		});
-
-		vscode.window.createOutputChannel('sort imports').append(`test:${organizedImports.join('\n')}`);
 	}
 
 	private readImports(): [ImportEntry[], vscode.Range] | undefined {
@@ -140,13 +137,14 @@ export class DartImportSorter {
 				return;
 			}
 
-			// TODO: i don't like that `localeCompare` prioritizes other symbols over slashes.
-			const sortedImports = imports.sort((a, b) => a.content.localeCompare(b.content));
+			const sortedImports = imports.sort((a, b) => {
+				return a.content < b.content ? -1 : a.content > b.content ? 1 : 0;
+			});
 			result.push(...sortedImports);
 			result.push({ content: '', comments: [] });
 		};
 
-		// Get this from preferences
+		// TODO: Get this from preferences
 		const arePackageLocalImportsSeparated = true;
 
 		rawImports.forEach((entry) => {
